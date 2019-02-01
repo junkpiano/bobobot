@@ -1,7 +1,11 @@
 const Telegraf = require("telegraf");
 const axios = require("axios");
+const moment = require("moment");
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
+const endpoint =
+	"http://rakuten-towerman.azurewebsites.net/towerman-restapi/rest/cafeteria/menulist?menuDate=" +
+	moment().format("YYYYMMDD");
 bot.start(ctx => ctx.reply("Welcome"));
 bot.help(ctx => ctx.reply("Send me a sticker"));
 bot.on("sticker", ctx => ctx.reply("👍"));
@@ -28,9 +32,7 @@ function processResponse(response, mealTime, floor) {
 
 bot.command("lunch9", ctx => {
 	axios
-		.get(
-			"http://rakuten-towerman.azurewebsites.net/towerman-restapi/rest/cafeteria/menulist?menuDate=20190201"
-		)
+		.get(endpoint)
 		.then(response => {
 			ctx.replyWithMediaGroup(processResponse(response, 1, "9F"));
 		})
@@ -42,9 +44,7 @@ bot.command("lunch9", ctx => {
 
 bot.command("lunch22", ctx => {
 	axios
-		.get(
-			"http://rakuten-towerman.azurewebsites.net/towerman-restapi/rest/cafeteria/menulist?menuDate=20190201"
-		)
+		.get(endpoint)
 		.then(response => {
 			ctx.replyWithMediaGroup(processResponse(response, 1, "22F"));
 		})
@@ -56,9 +56,7 @@ bot.command("lunch22", ctx => {
 
 bot.command("dinner9", ctx => {
 	axios
-		.get(
-			"http://rakuten-towerman.azurewebsites.net/towerman-restapi/rest/cafeteria/menulist?menuDate=20190201"
-		)
+		.get(endpoint)
 		.then(response => {
 			ctx.replyWithMediaGroup(processResponse(response, 2, "9F"));
 		})
@@ -70,9 +68,7 @@ bot.command("dinner9", ctx => {
 
 bot.command("dinner22", ctx => {
 	axios
-		.get(
-			"http://rakuten-towerman.azurewebsites.net/towerman-restapi/rest/cafeteria/menulist?menuDate=20190201"
-		)
+		.get(endpoint)
 		.then(response => {
 			ctx.replyWithMediaGroup(processResponse(response, 2, "22F"));
 		})
