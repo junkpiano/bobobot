@@ -6,34 +6,33 @@ bot.start(ctx => ctx.reply("Welcome"));
 bot.help(ctx => ctx.reply("Send me a sticker"));
 bot.on("sticker", ctx => ctx.reply("👍"));
 bot.hears("hi", ctx => ctx.reply("Hey there"));
+
+function processResponse(response, mealTime, floor) {
+	const listMeals = response.data.data;
+	result = [];
+
+	for (var meal of listMeals) {
+		if (meal.mealTime === mealTime) {
+			if (meal.cafeteriaId == floor) {
+				result.push({
+					type: "photo",
+					media: meal.imageURL,
+					caption: meal.cafeteriaId + ": " + meal.menuType
+				});
+			}
+		}
+	}
+
+	return result;
+}
+
 bot.command("lunch9", ctx => {
 	axios
 		.get(
 			"http://rakuten-towerman.azurewebsites.net/towerman-restapi/rest/cafeteria/menulist?menuDate=20190201"
 		)
 		.then(response => {
-			const listMeals = response.data.data;
-			ninthFloor = [];
-			twentysecondFloor = [];
-
-			for (var meal of listMeals) {
-				if (meal.mealTime === 1) {
-					if (meal.cafeteriaId == "9F") {
-						ninthFloor.push({
-							type: "photo",
-							media: meal.imageURL
-						});
-					} else if (meal.cafeteriaId == "22F") {
-						twentysecondFloor.push({
-							type: "photo",
-							media: meal.imageURL
-						});
-					}
-				}
-			}
-
-			ctx.reply("9F");
-			ctx.replyWithMediaGroup(ninthFloor);
+			ctx.replyWithMediaGroup(processResponse(response, 1, "9F"));
 		})
 		.catch(error => {
 			ctx.reply("sorry, something is wrong.");
@@ -47,28 +46,7 @@ bot.command("lunch22", ctx => {
 			"http://rakuten-towerman.azurewebsites.net/towerman-restapi/rest/cafeteria/menulist?menuDate=20190201"
 		)
 		.then(response => {
-			const listMeals = response.data.data;
-			ninthFloor = [];
-			twentysecondFloor = [];
-
-			for (var meal of listMeals) {
-				if (meal.mealTime === 1) {
-					if (meal.cafeteriaId == "9F") {
-						ninthFloor.push({
-							type: "photo",
-							media: meal.imageURL
-						});
-					} else if (meal.cafeteriaId == "22F") {
-						twentysecondFloor.push({
-							type: "photo",
-							media: meal.imageURL
-						});
-					}
-				}
-			}
-
-			ctx.reply("22F");
-			ctx.replyWithMediaGroup(twentysecondFloor);
+			ctx.replyWithMediaGroup(processResponse(response, 1, "22F"));
 		})
 		.catch(error => {
 			ctx.reply("sorry, something is wrong.");
@@ -82,28 +60,7 @@ bot.command("dinner9", ctx => {
 			"http://rakuten-towerman.azurewebsites.net/towerman-restapi/rest/cafeteria/menulist?menuDate=20190201"
 		)
 		.then(response => {
-			const listMeals = response.data.data;
-			ninthFloor = [];
-			twentysecondFloor = [];
-
-			for (var meal of listMeals) {
-				if (meal.mealTime === 2) {
-					if (meal.cafeteriaId == "9F") {
-						ninthFloor.push({
-							type: "photo",
-							media: meal.imageURL
-						});
-					} else if (meal.cafeteriaId == "22F") {
-						twentysecondFloor.push({
-							type: "photo",
-							media: meal.imageURL
-						});
-					}
-				}
-			}
-
-			ctx.reply("9F");
-			ctx.replyWithMediaGroup(ninthFloor);
+			ctx.replyWithMediaGroup(processResponse(response, 2, "9F"));
 		})
 		.catch(error => {
 			ctx.reply("sorry, something is wrong.");
@@ -117,28 +74,7 @@ bot.command("dinner22", ctx => {
 			"http://rakuten-towerman.azurewebsites.net/towerman-restapi/rest/cafeteria/menulist?menuDate=20190201"
 		)
 		.then(response => {
-			const listMeals = response.data.data;
-			ninthFloor = [];
-			twentysecondFloor = [];
-
-			for (var meal of listMeals) {
-				if (meal.mealTime === 2) {
-					if (meal.cafeteriaId == "9F") {
-						ninthFloor.push({
-							type: "photo",
-							media: meal.imageURL
-						});
-					} else if (meal.cafeteriaId == "22F") {
-						twentysecondFloor.push({
-							type: "photo",
-							media: meal.imageURL
-						});
-					}
-				}
-			}
-
-			ctx.reply("22F");
-			ctx.replyWithMediaGroup(twentysecondFloor);
+			ctx.replyWithMediaGroup(processResponse(response, 2, "22F"));
 		})
 		.catch(error => {
 			ctx.reply("sorry, something is wrong.");
