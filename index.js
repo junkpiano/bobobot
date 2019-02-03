@@ -3,9 +3,6 @@ const axios = require("axios");
 const moment = require("moment");
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
-const endpoint =
-	"http://rakuten-towerman.azurewebsites.net/towerman-restapi/rest/cafeteria/menulist?menuDate=" +
-	moment().format("YYYYMMDD");
 bot.start(ctx => ctx.reply("Welcome"));
 bot.help(ctx => ctx.reply("Send me a sticker"));
 bot.on("sticker", ctx => ctx.reply("👍"));
@@ -30,51 +27,36 @@ function processResponse(response, mealTime, floor) {
 	return result;
 }
 
-bot.command("lunch9", ctx => {
+function handleRequest(ctx, mealTime, floor) {
+	const endpoint =
+		"http://rakuten-towerman.azurewebsites.net/towerman-restapi/rest/cafeteria/menulist?menuDate=" +
+		moment().format("YYYYMMDD");
+
 	axios
 		.get(endpoint)
 		.then(response => {
-			ctx.replyWithMediaGroup(processResponse(response, 1, "9F"));
+			ctx.replyWithMediaGroup(processResponse(response, mealTime, floor));
 		})
 		.catch(error => {
 			ctx.reply("sorry, something is wrong.");
 		});
 	ctx.reply("just a moment, please.");
+}
+
+bot.command("lunch9", ctx => {
+	handleRequest(ctx, 1, "9F");
 });
 
 bot.command("lunch22", ctx => {
-	axios
-		.get(endpoint)
-		.then(response => {
-			ctx.replyWithMediaGroup(processResponse(response, 1, "22F"));
-		})
-		.catch(error => {
-			ctx.reply("sorry, something is wrong.");
-		});
-	ctx.reply("just a moment, please.");
+	handleRequest(ctx, 1, "22F");
 });
 
 bot.command("dinner9", ctx => {
-	axios
-		.get(endpoint)
-		.then(response => {
-			ctx.replyWithMediaGroup(processResponse(response, 2, "9F"));
-		})
-		.catch(error => {
-			ctx.reply("sorry, something is wrong.");
-		});
-	ctx.reply("just a moment, please.");
+	handleRequest(ctx, 2, "9F");
 });
 
 bot.command("dinner22", ctx => {
-	axios
-		.get(endpoint)
-		.then(response => {
-			ctx.replyWithMediaGroup(processResponse(response, 2, "22F"));
-		})
-		.catch(error => {
-			ctx.reply("sorry, something is wrong.");
-		});
-	ctx.reply("just a moment, please.");
+	handleRequest(ctx, 2, "22F");
 });
+
 bot.launch();
