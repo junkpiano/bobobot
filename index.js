@@ -35,7 +35,18 @@ function handleRequest(ctx, mealTime, floor) {
 	axios
 		.get(endpoint)
 		.then(response => {
-			ctx.replyWithMediaGroup(processResponse(response, mealTime, floor));
+			const result = processResponse(response, mealTime, floor);
+			console.log(result);
+			const segment = 9;
+			for (var index = 0; index < result.length / segment; index++) {
+				var endIndex =
+					(index + 1) * segment <= result.length
+						? (index + 1) * segment
+						: result.length;
+				ctx.replyWithMediaGroup(
+					result.slice(0 + segment * index, endIndex)
+				);
+			}
 		})
 		.catch(error => {
 			ctx.reply("sorry, something is wrong.");
