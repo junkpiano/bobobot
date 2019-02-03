@@ -28,9 +28,11 @@ function processResponse(response, mealTime, floor) {
 }
 
 function handleRequest(ctx, mealTime, floor) {
+	const today = moment().format("YYYYMMDD");
+	console.log(today);
 	const endpoint =
 		"http://rakuten-towerman.azurewebsites.net/towerman-restapi/rest/cafeteria/menulist?menuDate=" +
-		moment().format("YYYYMMDD");
+		today;
 
 	axios
 		.get(endpoint)
