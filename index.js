@@ -1,6 +1,6 @@
 const Telegraf = require("telegraf");
 const axios = require("axios");
-const moment = require("moment");
+var moment = require("moment-timezone");
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 bot.start(ctx => ctx.reply("Welcome"));
@@ -28,7 +28,9 @@ function processResponse(response, mealTime, floor) {
 }
 
 function handleRequest(ctx, mealTime, floor) {
-	const today = moment().format("YYYYMMDD");
+	const today = moment()
+		.tz("Asia/Tokyo")
+		.format("YYYYMMDD");
 	console.log(today);
 	const endpoint =
 		"http://rakuten-towerman.azurewebsites.net/towerman-restapi/rest/cafeteria/menulist?menuDate=" +
